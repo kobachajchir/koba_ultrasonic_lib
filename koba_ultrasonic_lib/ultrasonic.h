@@ -19,22 +19,26 @@ typedef void (*PrintfMethod)(const char* message);
 #define TRIGGER_ALLOWED flags.bitmap.bit5
 #define ECHO_RECEIVED flags.bitmap.bit6
 #define NEW_RESULT flags.bitmap.bit7
-	
+
 #define ALL_FLAGS flags.byte
 
-typedef union{
-	struct{
-		uint8_t bit0: 1;
-		uint8_t bit1: 1;
-		uint8_t bit2: 1;
-		uint8_t bit3: 1;
-		uint8_t bit4: 1;
-		uint8_t bit5: 1;
-		uint8_t bit6: 1;
-		uint8_t bit7: 1;
-	}bitmap;
+typedef union {
+	struct {
+		uint8_t bit0: 1;  // Bit 0 - Parte del nibble bajo (bitL)
+		uint8_t bit1: 1;  // Bit 1 - Parte del nibble bajo (bitL)
+		uint8_t bit2: 1;  // Bit 2 - Parte del nibble bajo (bitL)
+		uint8_t bit3: 1;  // Bit 3 - Parte del nibble bajo (bitL)
+		uint8_t bit4: 1;  // Bit 4 - Parte del nibble alto (bitH)
+		uint8_t bit5: 1;  // Bit 5 - Parte del nibble alto (bitH)
+		uint8_t bit6: 1;  // Bit 6 - Parte del nibble alto (bitH)
+		uint8_t bit7: 1;  // Bit 7 - Parte del nibble alto (bitH)
+	} bitmap;
+	struct {
+		uint8_t bitL: 4;  // Nibble bajo (bits 0-3)
+		uint8_t bitH: 4;  // Nibble alto (bits 4-7)
+	} nibbles;
 	uint8_t byte;
-}Byte_Struct;
+} Byte_Flag;
 
 // Estados del sensor
 typedef enum {
@@ -53,7 +57,7 @@ typedef struct {
 	volatile uint32_t echo_finish_time;
 	volatile uint32_t distance_mm;
 	// Banderas
-	volatile Byte_Struct flags;
+	volatile Byte_Flag flags;
 	// Estado
 	volatile ultra_state_t state;
 	volatile bool debugMode;
